@@ -2,11 +2,28 @@
   text-align: center;
   list-style: none;
   padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+body {
+  background-color: steelblue;
+}
+p {
+  margin-top: 15px;
+  font-size: 50px;
+  border-top: 20px solid lightgrey;
+  border-bottom: 20px solid grey;
+  border-right: 20px solid darkgrey;
+  border-left: 20px solid darkgrey;
+  background-color: white;
 }
 
 .food {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  background-color: slategrey;
 }
 
 .food > ul {
@@ -18,12 +35,14 @@
 }
 
 .breeds {
+  background-color: lightgrey;
   font-size: 1.25rem;
   border-top: 1px solid black;
 }
 
 
 .type {
+  background-color: white;
   display: flex;
   flex-direction: row;
   font-size: 1.5rem;
@@ -31,12 +50,15 @@
   border-top: 1px solid black;
 }
 
+
 .type > ul:first-child {
   border-right: 1px solid black;
 
 }
 
 .volumes {
+  background-color: lightgrey;
+  font-size: 17px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
