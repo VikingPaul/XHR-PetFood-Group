@@ -1,116 +1,68 @@
-// This function receives the data from the Dog Food json file (i.e. the 
-//  responseText from the dogfood.json XHR pull), parses it and inserts it into the DOM
-function loadDogs() {
+"use strict"
 
-  // dgfood will hold the string containing the dogfood info that is to be
-  //  inserted into the DOM
-  var dgfood = "";
+// This function receives the data from both the json files parses it and inserts it into the DOM
+function loadFood() {
 
-  // This parses the json file into a js readable object and stores it so
-  //  the data can be accessed below 
-  var dogFoods = JSON.parse(this.responseText);
+  // food will hold the string containing the petfood info that is to be inserted into the DOM
+  var food = "";
 
-  // This reduces the amount of typing to access the data in the dogFoods object
-  var dogfood = dogFoods.dog_brands;
+  // This parses the json file into a js readable object and stores it so the data can be accessed below and chooses which file to use.
+  var animalFoods = JSON.parse(this.responseText);
+  if (animalFoods.dog_brands) {;
+    var petfood = animalFoods.dog_brands;
+    var foodplacement = document.getElementById('dogfood')
+  } else {
+    var petfood = animalFoods.cat_brands;
+    var foodplacement = document.getElementById('catfood')
+  }
+  // Loops through the individual names of the pet food brands, inserts the name into the food string along with the enclosing HTML elements.
+  for (let i in petfood) {
+    food += `<ul><li>${petfood[i].name}</li>`;
 
-  // Loops through the individual names of the pet food brands, inserts the 
-  //  name into the dgfood string along with the enclosing HTML elements.
-  for (i in dogfood) {
-    dgfood += `<ul><li>${dogfood[i].name}</li>`;
-    dgfood += `<div class="type">`;
+    // Each of the cat foods have a Breeds category.  This loops through each of the breed names and inserts it into a div below the cat food name along with the enclosing HTML elements.
+    if (foodplacement.id === "catfood") {
+      food += '<ul><li class="breeds">Breeds: / ';
+      for(let l in petfood[i].Breeds) {
+        food += `${petfood[i].Breeds[l]} / `;
+      };
 
-    // Loops through the individual types of pet food, inserts the 
-    //  name into the dgfood string along with the enclosing HTML elements.
-    for(j in dogfood[i].types) {
-      dgfood += `<ul><li>${dogfood[i].types[j].type}</li>`;
-      dgfood += `<div class="volumes">`;
+      // Closes the breed list and opens the div holding the food type, volume and price info
+      food += "</li></ul>";
+    }
+    food += "<div class='type'>";
 
-      // Loops through the individual volumes along with their prices for each pet
-      //  food and inserts the volume and price info into the dgfood string 
-      //  along with the enclosing HTML elements.
-      for (k in dogfood[i].types[j].volumes) {
-        dgfood += `<ul><li>${dogfood[i].types[j].volumes[k].name}: ${dogfood[i].types[j].volumes[k].price}</li></ul>`;
+    // Loops through the individual types of pet food, inserts the name into the food string along with the enclosing HTML elements.
+    for(let j in petfood[i].types) {
+      food += `<ul><li>${petfood[i].types[j].type}</li>`;
+      food += `<div class="volumes">`;
+
+      // Loops through the individual volumes along with their prices for each pet food and inserts the volume and price info into the food string along with the enclosing HTML elements.
+      for (let k in petfood[i].types[j].volumes) {
+        food += `<ul><li>${petfood[i].types[j].volumes[k].name}: ${petfood[i].types[j].volumes[k].price}</li></ul>`;
       };
 
       // Closes the div and ul from the inner loop (food type)
-      dgfood += `</div>`;
-      dgfood += `</ul>`;
+      food += `</div>`;
+      food += `</ul>`;
     };
 
     // Closes the div and ul from the outer loop (food brand)
-    dgfood += `</div>`;
-    dgfood += `</ul>`;
+    food += `</div>`;
+    food += `</ul>`;
   };
 
-  // Adds the dgfood string (DOM elements and text) to the static <div> #dogfood
-  document.getElementById('dogfood').innerHTML = dgfood;
-};
-
-// This function receives the data from the Cat Food json file (i.e. the 
-//  responseText from the dogfood.json XHR pull), parses it and inserts it into the DOM
-function loadCats() {
-
-  // ctfood will hold the string containing the catfood info that is to be
-  //  inserted into the DOM
-  var ctfood = "";
-
-  // This parses the json file into a js readable object and stores it so
-  //  the data can be accessed below 
-  var catFoods = JSON.parse(this.responseText);
-  var catfood = catFoods.cat_brands;
-
-  // Loops through the individual names of the pet food brands, inserts the 
-  //  name into the ctfood string along with the enclosing HTML elements.
-  for (i in catfood) {
-    ctfood += `<ul><li>${catfood[i].name}</li><ul><li class="breeds">Breeds: `;
-
-    // Each of the cat foods have a Breeds category.  This loops through
-    //  each of the breed names and inserts it into a div below the cat food name
-    //  along with the enclosing HTML elements.
-    ctfood += ` / `;
-    for(l in catfood[i].Breeds) {
-      ctfood += `${catfood[i].Breeds[l]} / `;
-    };
-
-    // Closes the breed list and opens the div holding the food type, volume and price info
-    ctfood += "</li></ul>";
-    ctfood += "<div class='type'>";
-
-    // Loops through the individual types of pet food, inserts the 
-    //  name into the ctfood string along with the enclosing HTML elements.
-    for(j in catfood[i].types) {
-      ctfood += `<ul><li>${catfood[i].types[j].type}</li>`;
-      ctfood += `<div class="volumes">`;
-
-      // Loops through the individual volumes along with their prices for each pet
-      //  food and inserts the volume and price info into the ctfood string 
-      //  along with the enclosing HTML elements.
-      for (k in catfood[i].types[j].volumes) {
-        ctfood += `<ul><li>${catfood[i].types[j].volumes[k].name}: ${catfood[i].types[j].volumes[k].price}</li></ul>`;
-      };
-
-      // Closes the div and ul from the inner loop (food type)
-      ctfood += `</div>`;
-      ctfood += `</ul>`;
-    };
-
-    // Closes the div and ul from the outer loop (food brand)
-    ctfood += `</div>`;
-    ctfood += `</ul>`;
-  };
-
-  // Adds the ctfood string (DOM elements and text) to the static <div> #catfood
-  document.getElementById('catfood').innerHTML = ctfood;
+  // Adds the food string (DOM elements and text) to the static <div> #petfood
+  foodplacement.innerHTML = food;
 };
 
 // Sets, Opens, Sends and receives the XHR for the Dog Food (dogfood.json) file 
 var dog = new XMLHttpRequest();
-dog.addEventListener("load", loadDogs);
+dog.addEventListener("load", loadFood);
 dog.open("GET", "dogs.json");
 dog.send();
 
-// Sets, Opens, Sends and receives the XHR for the Cat Food (catfood.json) file 
+// Sets, Opens, Sends and receives the XHR for the Cat Food (petfood.json) file 
 var cat = new XMLHttpRequest();
-cat.addEventListener("load", loadCats);
+cat.addEventListener("load", loadFood);
 cat.open("GET", "catfood.json");
 cat.send();
